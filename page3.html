@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoSpace — Find Your Perfect Room</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #f0f2f5; color: #1a1a2e; font-size: 14px; }
+  nav { background: #fff; display: flex; align-items: center; padding: 0 24px; height: 52px; border-bottom: 1px solid #e8eaed; gap: 24px; }
+  .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: #0d9488; text-decoration: none; }
+  .nav-logo .logo-icon { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, #0d9488, #14b8a6); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 13px; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-link { padding: 6px 14px; border-radius: 6px; font-size: 14px; font-weight: 500; color: #444; cursor: pointer; border: none; background: none; }
+  .nav-link.active { background: #f0f2f5; font-weight: 600; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #14b8a6, #0891b2); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 700; }
+  .sign-out { font-size: 13px; color: #666; cursor: pointer; }
+
+  .hero { background: linear-gradient(135deg, #0d9488 0%, #0891b2 100%); padding: 48px 24px 56px; color: #fff; }
+  .hero-back { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .hero h1 { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+  .hero p { font-size: 15px; color: rgba(255,255,255,0.85); margin-bottom: 28px; }
+  .btn-add { background: #22c55e; color: #fff; border: none; padding: 11px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+
+  .room-list { max-width: 960px; margin: 0 auto; padding: 32px 24px; display: flex; flex-direction: column; gap: 20px; }
+  .room-card { background: #fff; border-radius: 16px; display: flex; align-items: stretch; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .room-card-img { width: 200px; min-height: 160px; flex-shrink: 0; background: #ccc center/cover; }
+  .img1 { background: url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=400&q=80') center/cover; }
+  .img2 { background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=80') center/cover; }
+  .img3 { background: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=400&q=80') center/cover; }
+  .room-card-body { flex: 1; padding: 20px 24px; display: flex; flex-direction: column; gap: 8px; }
+  .room-badge { font-size: 11px; font-weight: 700; color: #fff; background: #14b8a6; padding: 3px 10px; border-radius: 20px; display: inline-block; width: fit-content; margin-bottom: 4px; }
+  .room-available { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #16a34a; font-weight: 500; }
+  .room-available::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: block; }
+  .room-card-actions { display: flex; gap: 8px; margin-left: auto; }
+  .btn-edit { background: #f59e0b; color: #fff; border: none; padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-delete { background: #ef4444; color: #fff; border: none; padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .room-title { font-size: 20px; font-weight: 700; }
+  .room-desc { font-size: 13px; color: #666; }
+  .room-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .room-tag { font-size: 12px; color: #444; background: #f3f4f6; padding: 4px 10px; border-radius: 20px; }
+  .room-tag.instant { color: #0d9488; background: #f0fdf9; }
+  .btn-check { background: #0d9488; color: #fff; border: none; padding: 11px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px; }
+  .room-price-col { padding: 20px 24px; border-left: 1px solid #f0f2f5; min-width: 130px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; }
+  .price-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+  .price-val { font-size: 28px; font-weight: 700; color: #1a1a2e; }
+  .price-per { font-size: 12px; color: #888; }
+  .price-badge { background: #f0fdf9; color: #0d9488; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid #99f6e4; }
+  .room-head { display: flex; align-items: flex-start; justify-content: space-between; }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="#"><div class="logo-icon">CS</div>CoSpace</a>
+  <div class="nav-links">
+    <button class="nav-link active">Spaces</button>
+    <button class="nav-link">My Booking</button>
+  </div>
+  <div class="nav-right">
+    <div class="avatar">AD</div>
+    <span style="font-size:13px;color:#444;font-weight:500;">admin</span>
+    <span class="sign-out">Sign out</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-back">← Back to workspace</div>
+  <h1>Find your perfect room</h1>
+  <p>3 rooms available · Compare, book, and work smarter</p>
+  <button class="btn-add">+ Add Room</button>
+</div>
+
+<div class="room-list">
+  <div class="room-card">
+    <div class="room-card-img img1"></div>
+    <div class="room-card-body">
+      <div class="room-head">
+        <div>
+          <div class="room-badge">ROOM 1</div>
+          <div class="room-available">Available now</div>
+        </div>
+        <div class="room-card-actions">
+          <button class="btn-edit">✏️ Edit</button>
+          <button class="btn-delete">🗑 Delete</button>
+        </div>
+      </div>
+      <div class="room-title">Meeting Room G</div>
+      <div class="room-desc">Modern workspace designed for focus and productivity.</div>
+      <div class="room-tags">
+        <span class="room-tag">👥 10 people</span>
+        <span class="room-tag instant">✓ Instant booking</span>
+      </div>
+      <button class="btn-check">Check availability →</button>
+    </div>
+    <div class="room-price-col">
+      <div class="price-label">Starting From</div>
+      <div class="price-val">฿200</div>
+      <div class="price-per">per hour</div>
+      <div class="price-badge">BEST VALUE</div>
+    </div>
+  </div>
+
+  <div class="room-card">
+    <div class="room-card-img img2"></div>
+    <div class="room-card-body">
+      <div class="room-head">
+        <div>
+          <div class="room-badge">ROOM 2</div>
+          <div class="room-available">Available now</div>
+        </div>
+        <div class="room-card-actions">
+          <button class="btn-edit">✏️ Edit</button>
+          <button class="btn-delete">🗑 Delete</button>
+        </div>
+      </div>
+      <div class="room-title">Meeting Room L</div>
+      <div class="room-desc">Modern workspace designed for focus and productivity.</div>
+      <div class="room-tags">
+        <span class="room-tag">👥 1 person</span>
+        <span class="room-tag instant">✓ Instant booking</span>
+      </div>
+      <button class="btn-check">Check availability →</button>
+    </div>
+    <div class="room-price-col">
+      <div class="price-label">Starting From</div>
+      <div class="price-val">฿20</div>
+      <div class="price-per">per hour</div>
+      <div class="price-badge">BEST VALUE</div>
+    </div>
+  </div>
+
+  <div class="room-card">
+    <div class="room-card-img img3"></div>
+    <div class="room-card-body">
+      <div class="room-head">
+        <div>
+          <div class="room-badge">ROOM 3</div>
+          <div class="room-available">Available now</div>
+        </div>
+        <div class="room-card-actions">
+          <button class="btn-edit">✏️ Edit</button>
+          <button class="btn-delete">🗑 Delete</button>
+        </div>
+      </div>
+      <div class="room-title">Meeting Room M</div>
+      <div class="room-desc">Modern workspace designed for focus and productivity.</div>
+      <div class="room-tags">
+        <span class="room-tag">👥 1 person</span>
+        <span class="room-tag instant">✓ Instant booking</span>
+      </div>
+      <button class="btn-check">Check availability →</button>
+    </div>
+    <div class="room-price-col">
+      <div class="price-label">Starting From</div>
+      <div class="price-val">฿220</div>
+      <div class="price-per">per hour</div>
+      <div class="price-badge">BEST VALUE</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
